@@ -1,25 +1,6 @@
-FlashCardsTS.zip
-DDMH.zip
-folder.jpg
-img0.jpg
-aaaa
-img5.jpg
-node_modules.zip
-Output.log
-wiki source.zip
-.vscode/launch.json
-files/2022-08-02_16.12.16.png
-files/2022-08-03_16.25.22.png
-files/bruh.zip
-files/2022-08-04_00.03.18.png
-files/disco_dance_dancing_kid_party.gif
-files/Firefoxv84.1.2.apk
-files/hunt.png
-files/Kingroot_4.9.5.20160728.apk
-files/Neue Welt.zip
-files/poezii-pentru-copii.pdf
-files/text.txt
-files/World.zip
-FlashCardsJS/data.js
-FlashCardsJS/FlashCards.zip
+.vscode
+files
+tests
+FlashCardsJS
 node_modules
+tsbuild
