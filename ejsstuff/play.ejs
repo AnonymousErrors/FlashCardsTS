@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/playpage.css">
+    <title> Flashcards * <%= game_id %></title>
+
+</head>
+<body>
+    <div class = "center" id = "gamebackground">
+        <span id = "countdown" style="position: relative;left: 50%;"></span>
+        <table class = "splitter">
+            <td class = "players">
+            </td>
+            <td class = "game">
+                Game id : <%= game_id %>
+                <p id="question">
+                    You're not supposed to see this
+                </p>
+                <div class = "useranswer">
+                    <input id = "textbox" type="text" autocomplete="off">
+                    <input id = "enterbutton" type="button" value = " > ">
+                </div>
+            </td>
+        </table>
+        <script src="/sweetalert2/dist/sweetalert2.all.min.js"></script>
+        <script>
+const playerName = "<%= name %>"
+const gameCode = "<%= game_id %>"
+const playerID = "<%= id %>"
+let current_data = JSON.parse('<%- predata %>')
+const players = document.getElementsByTagName("td")[0]
+const question = document.getElementById("question")
+const textbox = document.getElementById("textbox")
+const enterbutton = document.getElementById("enterbutton")
+const countdown = document.getElementById("countdown")
+function AddPlayer(name, score, color){
+    // create the bg
+    let player_bg = document.createElement("div")
+    player_bg.className = "player"
+    player_bg.style.backgroundColor = color
+    // create the name
+    let player_name = document.createElement("span")
+    player_name.className = "playertext"
+    player_name.id = "name"
+    player_name.innerText = name
+    // create the score
+    let player_score = document.createElement("span")
+    player_score.className = "playertext"
+    player_score.id = "score"
+    player_score.innerText = `Score: ${score}`
+    // append
+    player_bg.appendChild(player_name)
+    player_bg.appendChild(player_score)
+    players.appendChild(player_bg)
+}
+
+async function LEAVE(){
+    await fetch(`/leave?gameid=${gameCode}&player=${playerID}`)
+}
+
+const addplayers = async() => {
+    players.innerText = ""
+    if(!current_data.players.find(player => player.id == playerID)){
+        document.location = '/join'
+        return undefined
+    }
+    current_data.players.forEach(element => {
+        let bg_color = 'whitesmoke'
+        if(element.correct === true)
+            bg_color = 'rgba(49, 160, 49, 0.712)'
+        else if(element.correct === false)
+            bg_color = 'rgb(170, 22, 22)'
+        AddPlayer(`${element.name} ${element.id == playerID ? "(You)" : ""}`, element.score, bg_color)
+    })
+    return true
+}
+const checkanswer = async() => {
+    current_data = await fetch(`/checkgameanswer?gameid=${gameCode}&playerid=${playerID}&answer=${textbox.value}`).then(async(res)=>{
+        return await res.json()
+    })
+    addplayers()
+    textbox.value = "Waiting..."
+    textbox.disabled = true
+    for(let i = 0; i < promises.length; i++){
+        promises[i].stop()
+        await promises[i].promise.then(done => done)
+    }
+}
+enterbutton.onclick = async () => {
+    await checkanswer()
+}
+document.body.onkeyup = async(ev) =>{
+        switch(ev.key){
+            case "Enter":{
+                await checkanswer()
+                break;
+            }
+            default: {
+                break;
+            };
+        }
+    }
+window.onbeforeunload = LEAVE 
+let promises = []
+const sleep = (ms) => new Promise( (resolve) => setTimeout( () => resolve(true), ms) )
+const AddTimerHandler = () =>{
+    question.innerText = current_data.question.question
+    let stop = false
+    let promise = new Promise(async (resolve) => {
+        // initialize and wait the remaining server time
+        countdown.innerText = 'Time left: ' + current_data.countdowndata.count
+        await sleep(current_data.countdowndata.time)
+        // then go as normal
+        for(let i = current_data.countdowndata.count - 1; i > 0; i--){
+            countdown.innerText = 'Time left: ' + i
+            if(stop)
+                break
+            await sleep(1000)
+        }
+        countdown.innerText = ""
+        resolve(true)
+    })
+    promises.push({
+        promise : promise,
+        stop : () => stop = true
+    })
+}
+document.body.onload = async () =>{
+    // Player functionality 
+    console.log("loaded")
+    let modal = undefined
+    waiting = true;
+    while(true){
+        Swal.close(modal)
+        let stop = false
+        textbox.focus()
+        if(!addplayers())
+            document.location = '/join'
+        switch(current_data.type){
+            case 'NEWGAME' : {
+                question.innerText = 'Waiting for a new round...'
+                break;
+            }
+            case 'SHOWANSWER' : {
+                if(waiting){
+                    waiting = false
+                    break
+                }
+                if(!Array.isArray(current_data.answers))
+                    break
+                let correct_answer = current_data.players.find(player => player.id == playerID).correct
+                let answers_text_array = []
+                current_data.answers.forEach(answer => {
+                    answers_text_array.push(answer.answer_text)
+                })
+                stop = true  
+                console.log(correct_answer)
+                if(correct_answer){
+                    modal = Swal.fire({
+                        title: 'Congratulations!',
+                        text: 'Your answer was correct',
+                        type: 'success',
+                        confirmButtonText: 'Yooooo!'
+                    })
+                }
+                else{
+                    modal = Swal.fire({
+                        title: 'Oh no!',
+                        html: `Seems like your answer wasn't correct, the correct answer${ answers_text_array.length != 1 ? 's are' : ' is' } <b>${answers_text_array.join(', ')}.</b>`,
+                        type: "error",
+                        confirmButtonText: 'Ok...'
+                    })
+                }
+                await sleep(4000)
+                textbox.value = ""
+                textbox.disabled = false
+            
+                break;
+            }
+            case 'NEW' : {
+                textbox.value = ""
+                textbox.disabled = false
+                for(let i = 0; i < promises.length; i++){
+                    promises[i].stop()
+                    await promises[i].promise.then(done => done)
+                }
+                AddTimerHandler()
+                break;
+            }
+            default: break;
+        }
+        current_data = await fetch(`/gamestatus?gameid=${gameCode}&player=${playerID}`).then(async (res) => await res.json())
+    }
+    
+        /*new Promise(() => {
+        while(true){
+            current_data = await fetch()
+        }
+    })*/
+}      
+        </script>
+        
+    </div>
+    
+</body>
+</html>

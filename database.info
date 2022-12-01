@@ -1,0 +1,35 @@
+
+
+<GetQuestion>(question_id){ 
+    id: question_id, 
+    question: question_text
+}
+<GetAnswer>(question_id)[
+  Answer {
+    id: answer_id,
+    question_id: question_id',
+    answer_text: 'Ich bin'
+  }
+]
+<GetRandomQuestion> { 
+    id: question_id, 
+    question: question_text
+}
+<AddGame> Game_ID
+<GetGame>(Game_ID) {
+  id: game_id,
+  player_data: '{"players": []}'    ,
+  question_id: question_id
+}
+<AddPlayer>(Game_ID, player_data) "OK"
+
+player data type
+  player : {
+      id       : string,
+      name     : string,
+      score    : number,
+      host     : boolean, -- for future
+      answered : boolean
+      correct  : boolean
+  }
+*/

@@ -1,0 +1,29 @@
+{
+  "name": "flashcards",
+  "version": "1.0.0",
+  "description": "I was bored so I did this",
+  "main": "index.ts",
+  "scripts": {
+    "test": "clear && ts-node index.ts && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/ejs": "^3.1.1",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "fs": "^0.0.1-security",
+    "multiparty": "^4.2.3",
+    "mysql": "^2.18.1",
+    "path": "^0.12.7",
+    "util": "^0.12.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/multiparty": "^0.0.33",
+    "@types/mysql": "^2.15.21"
+  },
+  "directories": {
+    "test": "tests"
+  }
+}

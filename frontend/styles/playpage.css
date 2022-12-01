@@ -1,0 +1,78 @@
+
+.playertext{
+    font-size: 2vw !important;
+    font-weight: 500;
+}
+.splitter{
+    width: 100%;
+}
+
+.player{
+    margin-bottom: 2px;
+    border-radius: 7px;
+    padding: 5px;
+    width: auto;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    display: grid;
+}
+
+.players{
+    display: contents;
+    padding:0;
+    width: 30%;
+    border-top-width: 0;
+}
+.game{
+    font-size: 8px;
+    width: 70%;
+    padding:5px;
+    height: 100%;
+    border-radius: 7px;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+}
+#gamebackground{
+    padding: 10px;
+    width: 50%;
+    background-color:rgb(146, 167, 190);
+    border-radius: 6px;
+}
+#question{
+    height: 50%;
+    font-size: 2.5vw;
+}
+.useranswer{
+    display: flex;
+    height: 50%;
+    z-index: 1;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+#textbox{
+    height: 30px;
+    border-style: solid;
+    border-radius: 7px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: 0px;
+    border-color: black;
+    width: 60%;
+}
+#enterbutton{
+    height: 36px;
+    border-style: solid;
+    border-radius: 7px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: 0px;
+    border-color: black;
+    width: 10%;
+    cursor: pointer;
+    background-color: green;
+    font-weight: bold;
+    color:white;
+}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/main.css">
+    <title>Add Question</title>
+</head>
+<body>
+    <div id="background">
+        <p id="title"> Add Question </p>
+        <form id = "question_form" action="/addquestion">
+            <input id="question" name="question" placeholder="The Question?"  value="">
+            <input id="answer" name="answer" placeholder="The Answer" value="">
+            <input id="secret" name="secret" type="password" placeholder="The Password">
+            <br>
+            <input id="submit" type="submit" value="Add Question">
+            <span id = "error"></span>
+        </form>
+    </div>
+    <script src="/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <script src="/scripts/questions.js"></script>
+</body>
+</html>
